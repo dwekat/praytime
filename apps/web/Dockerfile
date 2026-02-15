@@ -1,12 +1,16 @@
+FROM oven/bun:1 AS prune
+WORKDIR /app
+RUN bunx -y turbo@latest --version
+COPY . .
+RUN bunx turbo prune web --docker
+
 FROM oven/bun:1 AS install
 WORKDIR /app
-COPY package.json bun.lock turbo.json ./
-COPY apps/web/package.json apps/web/package.json
+COPY --from=prune /app/out/json/ .
 RUN bun install --frozen-lockfile --ignore-scripts
 
 FROM install AS build
-COPY tsconfig.base.json ./
-COPY apps/web/ apps/web/
+COPY --from=prune /app/out/full/ .
 RUN bun run --filter web build
 
 FROM oven/bun:1-slim AS runtime
