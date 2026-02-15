@@ -270,15 +270,41 @@ export class PrayerTimes {
 
   // --- Astronomical calculations ---
 
+  // Jean Meeus, "Astronomical Algorithms" 2nd ed. — Chapter 25
   private sunPosition(jd: number): SunPosition {
-    const dd = jd - 2451545;
-    const g = D.fixAngle(357.529 + 0.98560028 * dd);
-    const q = D.fixAngle(280.459 + 0.98564736 * dd);
-    const L = D.fixAngle(q + 1.915 * D.sin(g) + 0.02 * D.sin(2 * g));
-    const e = 23.439 - 0.00000036 * dd;
-    const RA = D.arctan2(D.cos(e) * D.sin(L), D.cos(L)) / 15;
-    const eqt = q / 15 - D.fixHour(RA);
-    const decl = D.arcsin(D.sin(e) * D.sin(L));
+    const T = (jd - 2451545) / 36525;
+
+    // Geometric mean longitude (deg)
+    const L0 = D.fixAngle(280.46646 + 36000.76983 * T + 0.0003032 * T * T);
+
+    // Mean anomaly (deg)
+    const M = D.fixAngle(357.52911 + 35999.05029 * T - 0.0001537 * T * T);
+
+    // Equation of center (deg)
+    const C =
+      (1.914602 - 0.004817 * T - 0.000014 * T * T) * D.sin(M) +
+      (0.019993 - 0.000101 * T) * D.sin(2 * M) +
+      0.000289 * D.sin(3 * M);
+
+    // Apparent longitude — nutation + aberration (deg)
+    const omega = D.fixAngle(125.04 - 1934.136 * T);
+    const lambda = D.fixAngle(L0 + C) - 0.00569 - 0.00478 * D.sin(omega);
+
+    // Obliquity of ecliptic with nutation (deg)
+    const e0 =
+      23 +
+      (26 + 21.448 / 60) / 60 -
+      (46.815 / 3600) * T -
+      (0.00059 / 3600) * T * T +
+      (0.001813 / 3600) * T * T * T;
+    const e = e0 + 0.00256 * D.cos(omega);
+
+    // Declination (deg) and right ascension (hours)
+    const decl = D.arcsin(D.sin(e) * D.sin(lambda));
+    const RA = D.arctan2(D.cos(e) * D.sin(lambda), D.cos(lambda)) / 15;
+
+    // Equation of time (hours)
+    const eqt = L0 / 15 - D.fixHour(RA);
 
     return { declination: decl, equation: eqt };
   }

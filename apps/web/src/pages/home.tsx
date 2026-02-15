@@ -109,7 +109,7 @@ export function HomePage() {
             try {
               currentPos = await getPosition();
               setupControls();
-              await loadTimes(true);
+              await loadTimes();
             } catch (e) {
               showError(e.message || "Could not detect location");
             }
@@ -118,7 +118,7 @@ export function HomePage() {
           function setupControls() {
             const dateEl = document.getElementById("date");
             dateEl.value = localDateStr(new Date());
-            dateEl.addEventListener("change", () => loadTimes(false));
+            dateEl.addEventListener("change", () => loadTimes());
 
             const sel = document.getElementById("method");
             for (const [code, label] of Object.entries(METHODS)) {
@@ -128,7 +128,7 @@ export function HomePage() {
               sel.appendChild(opt);
             }
             sel.value = "MAKKAH";
-            sel.addEventListener("change", () => loadTimes(false));
+            sel.addEventListener("change", () => loadTimes());
             document.getElementById("controls").hidden = false;
           }
 
@@ -178,36 +178,21 @@ export function HomePage() {
             return h * 60 + min;
           }
 
-          async function loadTimes(autoAdvance) {
+          async function loadTimes() {
             const { lat, lng, tz } = currentPos;
             const method = document.getElementById("method").value;
-            const dateEl = document.getElementById("date");
-            const date = dateEl.value;
+            const date = document.getElementById("date").value;
+            const data = await fetchTimes(lat, lng, date, tz, method);
+
             const now = new Date();
             const today = localDateStr(now);
-            const data = await fetchTimes(lat, lng, date, tz, method);
-            const nowMin = now.getHours() * 60 + now.getMinutes();
-
-            if (autoAdvance && date === today) {
-              const ishaTime = data.times.Isha;
-              if (ishaTime && nowMin >= parseTime(ishaTime)) {
-                const tmrw = new Date(now);
-                tmrw.setDate(tmrw.getDate() + 1);
-                const tmrwStr = localDateStr(tmrw);
-                dateEl.value = tmrwStr;
-                const tmrwData = await fetchTimes(lat, lng, tmrwStr, tz, method);
-                document.getElementById("subtitle").textContent = "Prayer times for tomorrow";
-                render(tmrwData, lat, lng, tmrwStr, 0);
-                return;
-              }
-            }
-
             const isToday = date === today;
             document.getElementById("subtitle").textContent =
               isToday ? "Prayer times for today" : "Prayer times for " + date;
 
             let nextIdx = -1;
             if (isToday) {
+              const nowMin = now.getHours() * 60 + now.getMinutes();
               for (let i = 0; i < PRAYERS.length; i++) {
                 const t = data.times[PRAYERS[i]];
                 if (t && parseTime(t) > nowMin) { nextIdx = i; break; }
