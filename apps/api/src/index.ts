@@ -102,7 +102,20 @@ const healthRoute = createRoute({
   },
 });
 
-const app = new OpenAPIHono();
+const app = new OpenAPIHono({
+  defaultHook: (result, c) => {
+    if (!result.success) {
+      const errors: Record<string, string[]> = {};
+      for (const issue of result.error.issues) {
+        const key = issue.path.join(".") || "_";
+        errors[key] ??= [];
+        errors[key].push(issue.message);
+      }
+      return c.json({ error: errors }, 400);
+    }
+    return undefined;
+  },
+});
 
 app.use("*", cors());
 
