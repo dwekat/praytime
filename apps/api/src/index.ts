@@ -50,9 +50,18 @@ const metaSchema = z.object({
 });
 
 const querySchema = z.object({
-  latitude: z.string().refine((v) => !Number.isNaN(Number(v)), "must be a number").openapi({ example: "31.95" }),
-  longitude: z.string().refine((v) => !Number.isNaN(Number(v)), "must be a number").openapi({ example: "35.93" }),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "must be YYYY-MM-DD").openapi({ example: "2026-02-15" }),
+  latitude: z.string()
+    .refine((v) => !Number.isNaN(Number(v)), "must be a number")
+    .refine((v) => Number(v) >= -90 && Number(v) <= 90, "must be between -90 and 90")
+    .openapi({ example: "31.95" }),
+  longitude: z.string()
+    .refine((v) => !Number.isNaN(Number(v)), "must be a number")
+    .refine((v) => Number(v) >= -180 && Number(v) <= 180, "must be between -180 and 180")
+    .openapi({ example: "35.93" }),
+  date: z.string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "must be YYYY-MM-DD")
+    .refine((v) => { const y = Number(v.slice(0, 4)); return y >= 1970 && y <= 2100; }, "year must be between 1970 and 2100")
+    .openapi({ example: "2026-02-15" }),
   method: z.enum(methods).optional().default("MWL").openapi({ description: "Calculation method" }),
   school: z.enum(["STANDARD", "HANAFI"]).optional().default("STANDARD").openapi({ description: "Juristic school for Asr" }),
   timezone: z.string().optional().openapi({ example: "Asia/Amman", description: "IANA timezone. Auto-detected if omitted." }),
