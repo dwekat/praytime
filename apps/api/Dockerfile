@@ -1,10 +1,9 @@
 FROM oven/bun:1 AS install
 WORKDIR /app
 COPY package.json bun.lock turbo.json ./
-COPY packages/moonsighting/package.json packages/moonsighting/package.json
 COPY packages/prayer-times/package.json packages/prayer-times/package.json
 COPY apps/api/package.json apps/api/package.json
-RUN bun install --frozen-lockfile
+RUN bun install --frozen-lockfile --ignore-scripts
 
 FROM install AS build
 COPY tsconfig.base.json ./

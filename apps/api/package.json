@@ -5,11 +5,15 @@
   "scripts": {
     "build": "bun build src/index.ts --outdir dist --target bun",
     "dev": "bun run --watch src/index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "test:e2e": "bun test tests/e2e.test.ts"
   },
   "dependencies": {
     "@prayer-times/core": "workspace:*",
     "hono": "^4.7.4",
     "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "testcontainers": "^11.11.0"
   }
 }
