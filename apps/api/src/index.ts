@@ -6,9 +6,9 @@ import type {
   LatitudeAdjustment,
   MidnightMode,
   School,
+  Shafaq,
   TimeFormat,
 } from "@prayer-times/core";
-import type { Shafaq } from "@prayer-times/moonsighting";
 
 const methodCodes = getMethodCodes();
 

@@ -19,19 +19,9 @@
         "zod": "^3.24.2",
       },
     },
-    "packages/moonsighting": {
-      "name": "@prayer-times/moonsighting",
-      "version": "1.0.0",
-      "devDependencies": {
-        "tsup": "^8.4.0",
-      },
-    },
     "packages/prayer-times": {
       "name": "@prayer-times/core",
       "version": "1.0.0",
-      "dependencies": {
-        "@prayer-times/moonsighting": "workspace:*",
-      },
       "devDependencies": {
         "tsup": "^8.4.0",
       },
@@ -147,8 +137,6 @@
     "@nodelib/fs.walk": ["@nodelib/fs.walk@1.2.8", "", { "dependencies": { "@nodelib/fs.scandir": "2.1.5", "fastq": "^1.6.0" } }, "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg=="],
 
     "@prayer-times/core": ["@prayer-times/core@workspace:packages/prayer-times"],
-
-    "@prayer-times/moonsighting": ["@prayer-times/moonsighting@workspace:packages/moonsighting"],
 
     "@rollup/rollup-android-arm-eabi": ["@rollup/rollup-android-arm-eabi@4.57.1", "", { "os": "android", "cpu": "arm" }, "sha512-A6ehUVSiSaaliTxai040ZpZ2zTevHYbvu/lDoeAteHI8QnaosIzm4qwtezfRg1jOYaUmnzLX1AOD6Z+UJjtifg=="],
 

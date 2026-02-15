@@ -23,9 +23,6 @@
     "build": "tsup",
     "test": "bun test"
   },
-  "dependencies": {
-    "@prayer-times/moonsighting": "workspace:*"
-  },
   "devDependencies": {
     "tsup": "^8.4.0"
   }

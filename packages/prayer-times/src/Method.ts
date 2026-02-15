@@ -1,5 +1,5 @@
 import type { CalculationMethod, MethodConfig } from "./types";
-import { SHAFAQ_GENERAL } from "@prayer-times/moonsighting";
+import { SHAFAQ_GENERAL } from "./moonsighting";
 
 // Prayer name constants used as param keys
 const FAJR = "Fajr";

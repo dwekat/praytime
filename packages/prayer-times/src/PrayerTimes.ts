@@ -11,12 +11,12 @@ import type {
   SunPosition,
   TuneOffsets,
 } from "./types";
-import type { Shafaq } from "@prayer-times/moonsighting";
+import type { Shafaq } from "./moonsighting";
 import {
   SHAFAQ_GENERAL,
   getMinutesBeforeSunrise,
   getMinutesAfterSunset,
-} from "@prayer-times/moonsighting";
+} from "./moonsighting";
 import { getMethods, getMethodCodes, CustomMethod } from "./Method";
 import * as D from "./DMath";
 

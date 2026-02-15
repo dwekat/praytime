@@ -1,7 +1,7 @@
 import { describe, test, expect } from "bun:test";
-import { computeDyy, interpolateMinutes } from "../src/PrayerTimes";
-import { getMinutesBeforeSunrise } from "../src/Fajr";
-import { getMinutesAfterSunset, SHAFAQ_GENERAL, SHAFAQ_AHMER, SHAFAQ_ABYAD } from "../src/Isha";
+import { computeDyy, interpolateMinutes } from "../src/moonsighting/computation";
+import { getMinutesBeforeSunrise } from "../src/moonsighting/Fajr";
+import { getMinutesAfterSunset, SHAFAQ_GENERAL, SHAFAQ_AHMER, SHAFAQ_ABYAD } from "../src/moonsighting/Isha";
 
 // ---------- DYY Calculation ----------
 

@@ -1,4 +1,4 @@
-import { computeDyy, interpolateMinutes } from "./PrayerTimes";
+import { computeDyy, interpolateMinutes } from "./computation";
 
 const DIVISOR = 55;
 

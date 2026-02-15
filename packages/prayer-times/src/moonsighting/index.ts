@@ -1,5 +1,5 @@
 export type { Hemisphere, Shafaq, SeasonalCoefficients } from "./types";
-export { computeDyy, interpolateMinutes } from "./PrayerTimes";
+export { computeDyy, interpolateMinutes } from "./computation";
 export { getMinutesBeforeSunrise } from "./Fajr";
 export {
   getMinutesAfterSunset,

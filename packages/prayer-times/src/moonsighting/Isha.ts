@@ -1,5 +1,5 @@
 import type { Shafaq, SeasonalCoefficients } from "./types";
-import { computeDyy, interpolateMinutes } from "./PrayerTimes";
+import { computeDyy, interpolateMinutes } from "./computation";
 
 export const SHAFAQ_GENERAL: Shafaq = "general";
 export const SHAFAQ_AHMER: Shafaq = "ahmer";
