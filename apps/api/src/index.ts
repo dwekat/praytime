@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { z } from "zod";
-import { PrayerTimes, getMethodCodes } from "@prayer-times/core";
+import { PrayerTimes, getMethodCodes } from "@praytime/core";
 import type {
   CalculationMethod,
   LatitudeAdjustment,
@@ -8,7 +8,7 @@ import type {
   School,
   Shafaq,
   TimeFormat,
-} from "@prayer-times/core";
+} from "@praytime/core";
 
 const methodCodes = getMethodCodes();
 

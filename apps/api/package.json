@@ -9,7 +9,7 @@
     "test:e2e": "bun test tests/e2e.test.ts"
   },
   "dependencies": {
-    "@prayer-times/core": "workspace:*",
+    "@praytime/core": "workspace:*",
     "hono": "^4.7.4",
     "zod": "^3.24.2"
   },
