@@ -26,7 +26,8 @@ export function HomePage() {
           .location { margin-top: 1.5rem; font-size: 0.875rem; color: #666; }
           .location span { color: #1a1a1a; font-weight: 500; }
           .method { margin-top: 1rem; }
-          .method select {
+          .controls { margin-top: 1rem; display: flex; gap: 0.75rem; align-items: center; }
+          .controls select, .controls input[type="date"] {
             font-size: 0.8125rem;
             padding: 0.25rem 0.5rem;
             border: 1px solid #ddd;
@@ -60,7 +61,8 @@ export function HomePage() {
         <h1>Praytime</h1>
         <p class="subtitle" id="subtitle">Prayer times for today</p>
         <div class="location" id="loc"></div>
-        <div class="method" id="methodWrap" hidden>
+        <div class="controls" id="controls" hidden>
+          <input type="date" id="date" />
           <select id="method"></select>
         </div>
         <div class="times" id="times">
@@ -106,14 +108,18 @@ export function HomePage() {
           async function init() {
             try {
               currentPos = await getPosition();
-              setupMethodSelect();
-              await loadTimes();
+              setupControls();
+              await loadTimes(true);
             } catch (e) {
               showError(e.message || "Could not detect location");
             }
           }
 
-          function setupMethodSelect() {
+          function setupControls() {
+            const dateEl = document.getElementById("date");
+            dateEl.value = localDateStr(new Date());
+            dateEl.addEventListener("change", () => loadTimes(false));
+
             const sel = document.getElementById("method");
             for (const [code, label] of Object.entries(METHODS)) {
               const opt = document.createElement("option");
@@ -122,8 +128,8 @@ export function HomePage() {
               sel.appendChild(opt);
             }
             sel.value = "MAKKAH";
-            sel.addEventListener("change", () => loadTimes());
-            document.getElementById("methodWrap").hidden = false;
+            sel.addEventListener("change", () => loadTimes(false));
+            document.getElementById("controls").hidden = false;
           }
 
           function getPosition() {
@@ -172,32 +178,42 @@ export function HomePage() {
             return h * 60 + min;
           }
 
-          async function loadTimes() {
+          async function loadTimes(autoAdvance) {
             const { lat, lng, tz } = currentPos;
             const method = document.getElementById("method").value;
+            const dateEl = document.getElementById("date");
+            const date = dateEl.value;
             const now = new Date();
             const today = localDateStr(now);
-            const data = await fetchTimes(lat, lng, today, tz, method);
+            const data = await fetchTimes(lat, lng, date, tz, method);
             const nowMin = now.getHours() * 60 + now.getMinutes();
 
-            const ishaTime = data.times.Isha;
-            if (ishaTime && nowMin >= parseTime(ishaTime)) {
-              const tmrw = new Date(now);
-              tmrw.setDate(tmrw.getDate() + 1);
-              const tmrwStr = localDateStr(tmrw);
-              const tmrwData = await fetchTimes(lat, lng, tmrwStr, tz, method);
-              document.getElementById("subtitle").textContent = "Prayer times for tomorrow";
-              render(tmrwData, lat, lng, tmrwStr, 0);
-              return;
+            if (autoAdvance && date === today) {
+              const ishaTime = data.times.Isha;
+              if (ishaTime && nowMin >= parseTime(ishaTime)) {
+                const tmrw = new Date(now);
+                tmrw.setDate(tmrw.getDate() + 1);
+                const tmrwStr = localDateStr(tmrw);
+                dateEl.value = tmrwStr;
+                const tmrwData = await fetchTimes(lat, lng, tmrwStr, tz, method);
+                document.getElementById("subtitle").textContent = "Prayer times for tomorrow";
+                render(tmrwData, lat, lng, tmrwStr, 0);
+                return;
+              }
             }
 
-            document.getElementById("subtitle").textContent = "Prayer times for today";
+            const isToday = date === today;
+            document.getElementById("subtitle").textContent =
+              isToday ? "Prayer times for today" : "Prayer times for " + date;
+
             let nextIdx = -1;
-            for (let i = 0; i < PRAYERS.length; i++) {
-              const t = data.times[PRAYERS[i]];
-              if (t && parseTime(t) > nowMin) { nextIdx = i; break; }
+            if (isToday) {
+              for (let i = 0; i < PRAYERS.length; i++) {
+                const t = data.times[PRAYERS[i]];
+                if (t && parseTime(t) > nowMin) { nextIdx = i; break; }
+              }
             }
-            render(data, lat, lng, today, nextIdx);
+            render(data, lat, lng, date, nextIdx);
           }
 
           function render(data, lat, lng, date, nextIdx) {
