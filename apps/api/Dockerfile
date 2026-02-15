@@ -14,10 +14,10 @@ RUN bun run build
 
 FROM oven/bun:1-slim AS runtime
 WORKDIR /app
-COPY --from=build --chown=1001:1001 /app/apps/api/dist ./dist
-COPY --from=build --chown=1001:1001 /app/node_modules ./node_modules
-COPY --from=build --chown=1001:1001 /app/apps/api/package.json ./
-USER 1001
+COPY --from=build --chown=bun:bun /app/apps/api/dist ./dist
+COPY --from=build --chown=bun:bun /app/node_modules ./node_modules
+COPY --from=build --chown=bun:bun /app/apps/api/package.json ./
+USER bun
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s CMD bun -e "fetch('http://localhost:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
 CMD ["bun", "run", "dist/index.js"]
