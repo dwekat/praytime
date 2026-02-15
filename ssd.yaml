@@ -1,0 +1,21 @@
+server: dwekat
+stack: /stacks/praytime
+
+services:
+  api:
+    context: .
+    dockerfile: apps/api/Dockerfile
+    target: runtime
+    domain: api.praytime.io
+    https: true
+    port: 3000
+
+  web:
+    context: .
+    dockerfile: apps/web/Dockerfile
+    target: runtime
+    domain: praytime.io
+    https: true
+    port: 3000
+    depends_on:
+      - api

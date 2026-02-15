@@ -2,6 +2,10 @@ node_modules
 dist
 .turbo
 .git
+.github
 *.md
 tests
-.env
+.env*
+.changeset
+ssd.yaml
+docker-compose.yml
