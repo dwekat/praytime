@@ -4,8 +4,8 @@ TypeScript monorepo for Islamic prayer time calculations. Rewritten from PHP for
 
 ## Packages
 
-- `@islamic-network/moonsighting` — MoonSighting.com Fajr/Isha calculation
-- `@islamic-network/prayer-times` — Core prayer time calculation engine (24 methods)
+- `@prayer-times/moonsighting` — MoonSighting.com Fajr/Isha calculation
+- `@prayer-times/core` — Core prayer time calculation engine (24 methods)
 
 ## Attribution
 

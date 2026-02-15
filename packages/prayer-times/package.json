@@ -1,5 +1,5 @@
 {
-  "name": "@islamic-network/prayer-times",
+  "name": "@prayer-times/core",
   "version": "1.0.0",
   "description": "Islamic prayer time calculation engine",
   "license": "GPL-3.0-or-later",
@@ -24,7 +24,7 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@islamic-network/moonsighting": "workspace:*"
+    "@prayer-times/moonsighting": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8.4.0"

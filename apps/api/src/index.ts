@@ -1,14 +1,14 @@
 import { Hono } from "hono";
 import { z } from "zod";
-import { PrayerTimes, getMethodCodes } from "@islamic-network/prayer-times";
+import { PrayerTimes, getMethodCodes } from "@prayer-times/core";
 import type {
   CalculationMethod,
   LatitudeAdjustment,
   MidnightMode,
   School,
   TimeFormat,
-} from "@islamic-network/prayer-times";
-import type { Shafaq } from "@islamic-network/moonsighting";
+} from "@prayer-times/core";
+import type { Shafaq } from "@prayer-times/moonsighting";
 
 const methodCodes = getMethodCodes();
 
