@@ -18,4 +18,5 @@ services:
     https: true
     port: 3000
     depends_on:
-      - api
+      api:
+        condition: service_healthy
