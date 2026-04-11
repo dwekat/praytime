@@ -9,12 +9,12 @@
     "test:e2e": "bun test tests/e2e.test.ts"
   },
   "dependencies": {
-    "@hono/zod-openapi": "^1.2.2",
+    "@hono/zod-openapi": "^1.2.4",
     "@praytime/core": "workspace:*",
-    "hono": "^4.7.4",
+    "hono": "^4.12.12",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "testcontainers": "^11.11.0"
+    "testcontainers": "^11.14.0"
   }
 }

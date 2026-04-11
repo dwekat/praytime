@@ -7,6 +7,6 @@
     "dev": "bun run --watch src/index.tsx"
   },
   "dependencies": {
-    "hono": "^4.7.4"
+    "hono": "^4.12.12"
   }
 }
