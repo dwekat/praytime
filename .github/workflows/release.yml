@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write # create the GitHub Release
+  id-token: write # npm provenance
+
+jobs:
+  release:
+    name: Publish @praytime/core to npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+
+      # registry-url wires NODE_AUTH_TOKEN into .npmrc for npm publish.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build
+
+      - name: Test
+        run: bun run test
+
+      - name: Resolve version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+
+      - name: Verify package.json matches tag
+        run: |
+          pkg=$(node -p "require('./packages/praytime/package.json').version")
+          tag="${{ steps.version.outputs.version }}"
+          if [ "$pkg" != "$tag" ]; then
+            echo "packages/praytime version ($pkg) does not match tag ($tag)"; exit 1
+          fi
+
+      - name: Extract changelog for this version
+        run: |
+          set -euo pipefail
+          awk -v v="## ${{ steps.version.outputs.version }}" \
+            '$0==v{f=1;next} /^## /&&f{exit} f{print}' packages/praytime/CHANGELOG.md > RELEASE_NOTES.md
+          if [ ! -s RELEASE_NOTES.md ]; then
+            echo "CHANGELOG.md has no section for ${{ steps.version.outputs.version }}. Run 'bun run changeset' and 'bun run version' first."; exit 1
+          fi
+          cat RELEASE_NOTES.md
+
+      - name: Publish to npm
+        working-directory: packages/praytime
+        run: |
+          set -euo pipefail
+          if npm view "@praytime/core@${{ steps.version.outputs.version }}" version >/dev/null 2>&1; then
+            echo "npm: @praytime/core@${{ steps.version.outputs.version }} already published, skipping"
+          else
+            npm publish --provenance --access public --ignore-scripts
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          body_path: RELEASE_NOTES.md # changeset changelog section for this version
+          generate_release_notes: true # appends GitHub's commit/PR list below
