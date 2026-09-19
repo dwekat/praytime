@@ -7,5 +7,4 @@ dist
 tests
 .env*
 .changeset
-ssd.yaml
 docker-compose.yml
