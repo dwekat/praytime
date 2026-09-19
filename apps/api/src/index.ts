@@ -64,7 +64,7 @@ const querySchema = z.object({
     .openapi({ example: "2026-02-15" }),
   method: z.enum(methods).optional().default("MWL").openapi({ description: "Calculation method" }),
   school: z.enum(["STANDARD", "HANAFI"]).optional().default("STANDARD").openapi({ description: "Juristic school for Asr" }),
-  timezone: z.string().optional().openapi({ example: "Asia/Amman", description: "IANA timezone. Auto-detected if omitted." }),
+  timezone: z.string().optional().openapi({ example: "Asia/Amman", description: "IANA timezone, e.g. Asia/Dubai. Times are returned in UTC when omitted." }),
   latitudeAdjustment: z.enum(["MIDDLE_OF_THE_NIGHT", "ANGLE_BASED", "ONE_SEVENTH", "NONE"]).optional().default("ANGLE_BASED").openapi({ description: "High-latitude adjustment method" }),
   midnightMode: z.enum(["STANDARD", "JAFARI"]).optional().openapi({ description: "How midnight is computed" }),
   format: z.enum(["24h", "12h", "12hNS", "Float", "iso8601"]).optional().default("24h").openapi({ description: "Time output format" }),

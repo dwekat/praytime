@@ -39,7 +39,7 @@ curl "http://localhost:3000/v1/times?latitude=51.5085&longitude=-0.1255&date=202
 | `date` | yes | — | `YYYY-MM-DD` |
 | `method` | no | `MWL` | Calculation method code |
 | `school` | no | `STANDARD` | `STANDARD` or `HANAFI` |
-| `timezone` | no | auto | IANA timezone |
+| `timezone` | no | UTC | IANA timezone, e.g. `Asia/Dubai`. Times come back in UTC when omitted |
 | `latitudeAdjustment` | no | `ANGLE_BASED` | `ANGLE_BASED`, `MIDDLE_OF_THE_NIGHT`, `ONE_SEVENTH`, `NONE` |
 | `midnightMode` | no | `STANDARD` | `STANDARD` or `JAFARI` |
 | `format` | no | `24h` | `24h`, `12h`, `12hNS`, `Float`, `iso8601` |
