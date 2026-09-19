@@ -1,6 +1,6 @@
 {
   "name": "@praytime/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Islamic prayer time calculation engine",
   "license": "GPL-3.0-or-later",
   "main": "./dist/index.js",
