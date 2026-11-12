@@ -40,13 +40,13 @@ const metaSchema = z.object({
   method: z.object({
     id: z.number(),
     name: z.string(),
-    params: z.record(z.union([z.number(), z.string()])),
+    params: z.record(z.string(), z.union([z.number(), z.string()])),
     location: z.object({ latitude: z.number(), longitude: z.number() }).optional(),
   }),
   latitudeAdjustmentMethod: z.string(),
   midnightMode: z.string(),
   school: z.string(),
-  offset: z.record(z.number().optional()),
+  offset: z.record(z.string(), z.number().optional()),
 });
 
 const querySchema = z.object({
@@ -84,7 +84,7 @@ const timesRoute = createRoute({
     },
     400: {
       description: "Validation error",
-      content: { "application/json": { schema: z.object({ error: z.record(z.array(z.string())) }) } },
+      content: { "application/json": { schema: z.object({ error: z.record(z.string(), z.array(z.string())) }) } },
     },
   },
 });
@@ -123,7 +123,9 @@ app.openapi(healthRoute, (c) => c.json({ status: "ok" }, 200));
 
 app.openapi(timesRoute, (c) => {
   const q = c.req.valid("query");
-  const [year, month, day] = q.date.split("-").map(Number);
+  const year = Number(q.date.slice(0, 4));
+  const month = Number(q.date.slice(5, 7));
+  const day = Number(q.date.slice(8, 10));
   const date = new Date(year, month - 1, day);
 
   const method = (q.method ?? "MWL") as CalculationMethod;
