@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeAll, afterAll } from "bun:test";
+import { describe, test, expect, beforeAll } from "bun:test";
 
 let app: { fetch: (req: Request) => Promise<Response> };
 
@@ -115,5 +115,17 @@ describe("GET /v1/times", () => {
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.times.Fajr).toBeDefined();
+  });
+});
+
+
+describe("GET /openapi.json", () => {
+  test("generates the documented response schemas", async () => {
+    const res = await app.fetch(new Request("http://localhost/openapi.json"));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.openapi).toBe("3.1.0");
+    expect(body.paths["/v1/times"].get.responses["200"]).toBeDefined();
+    expect(body.paths["/v1/times"].get.responses["400"]).toBeDefined();
   });
 });

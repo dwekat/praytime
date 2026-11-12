@@ -10,14 +10,16 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
+    "lint": "oxlint --deny-warnings packages apps",
     "changeset": "changeset",
-    "version": "changeset version"
+    "version": "changeset version",
+    "typecheck": "tsc --noEmit --project packages/praytime/tsconfig.json && tsc --noEmit --project apps/api/tsconfig.json"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.3",
     "turbo": "^2.11.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "oxlint": "^1.93.0"
   },
   "overrides": {
     "@grpc/grpc-js": "^1.14.4",

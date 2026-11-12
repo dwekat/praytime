@@ -1,5 +1,11 @@
 # @praytime/core
 
+## 1.0.3
+
+### Patch Changes
+
+- Update maintenance dependencies and migrate npm publishing to trusted publishing.
+
 ## 1.0.2
 
 ### Patch Changes
